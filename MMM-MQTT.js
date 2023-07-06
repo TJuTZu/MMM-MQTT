@@ -56,6 +56,7 @@ Module.register("MMM-MQTT", {
       value: "",
       time: Date.now(),
       maxAgeSeconds: sub.maxAgeSeconds,
+      maxLifeSeconds: sub.maxLifeSeconds,
       sortOrder: sub.sortOrder || 10, // TODO: Fix sort order i * 100 + j
       colors: sub.colors,
       conversions: sub.conversions,
@@ -136,6 +137,13 @@ Module.register("MMM-MQTT", {
       : false;
   },
 
+  isValueGone: function (maxLifeSeconds, updatedTime) {
+    return maxLifeSeconds
+      ? updatedTime + maxLifeSeconds * 1000 < Date.now()
+      : false;
+  },
+
+
   getColors: function (sub) {
     if (!sub.colors || sub.colors.length == 0) {
       return {};
@@ -187,6 +195,7 @@ Module.register("MMM-MQTT", {
       this.name,
       this.getColors,
       this.isValueTooOld,
+      this.isValueGone,
       this.convertValue
     );
   },
@@ -198,6 +207,7 @@ Module.register("MMM-MQTT", {
     name,
     getColors,
     isValueTooOld,
+    isValueGone,
     convertValue
   ) {
     const wrapper = document.createElement("table");
@@ -228,9 +238,12 @@ Module.register("MMM-MQTT", {
 
         // Value
         tooOld = isValueTooOld(sub.maxAgeSeconds, sub.time);
+        isGone = isValueGone(sub.maxLifeSeconds, sub.time);
         var valueWrapper = doc.createElement("td");
         var setValueinnerHTML = convertValue(sub);
-        valueWrapper.innerHTML = setValueinnerHTML;
+        valueWrapper.innerHTML = isGone
+           ? valueWrapper.innerHTML = ""
+           : valueWrapper.innerHTML = setValueinnerHTML;
         valueWrapper.className =
           "align-right medium mqtt-value " + (tooOld ? "dimmed" : "bright");
         valueWrapper.style.color = tooOld
