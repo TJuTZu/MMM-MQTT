@@ -6,7 +6,7 @@ Module for [MagicMirror](https://github.com/MichMich/MagicMirror/) showing the p
 
 ![Screenshot](doc/MQTT.png)
 
-## Installasjon
+## Install
 
 Go to `MagicMirror/modules` and write
 
@@ -45,6 +45,7 @@ Here is an example configuration with description. Put it in the `MagicMirror/co
             decimals: 1,          // Round numbers to this number of decimals
             sortOrder: 10,        // Can be used to sort entries in the same table
             maxAgeSeconds: 60,    // Reduce intensity if value is older
+            maxLifeSeconds: 600,  // Hide if value is older
             broadcast: true,      // Broadcast messages to other modules
             colors: [             // Value dependent colors
               { upTo: -10, value: "blue", label: "blue", suffix: "blue" },
@@ -60,7 +61,8 @@ Here is an example configuration with description. Put it in the `MagicMirror/co
             suffix: '%',
             decimals: 0,
             sortOrder: 20,
-            maxAgeSeconds: 60 
+            maxAgeSeconds: 60,
+            maxLifeSeconds: 600 
           },
           {
             topic: 'smoky/2/inside/temperature',
@@ -68,14 +70,16 @@ Here is an example configuration with description. Put it in the `MagicMirror/co
             decimals: 1,
             decimalSignInMessage: ",", // If the message decimal point is not "."
             sortOrder: 20,
-            maxAgeSeconds: 60
+            maxAgeSeconds: 60,
+            maxLifeSeconds: 600 
           },
           {
             topic: 'smoky/1/inside/smoke',
             label: 'Røyk',
             sortOrder: 30,
             divide: 10, // Divide numeric values. Alternatively use `multiply`.
-            maxAgeSeconds: 60
+            maxAgeSeconds: 60,
+            maxLifeSeconds: 600 
           },
           {
             topic: 'guests',
